@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
+import React, { useEffect, useRef, useState } from 'react';
 
 const ToDoItem = ({ todoItem, todoList, setTodoList }) => {
   const [edited, setEdited] = useState(false);
@@ -32,15 +32,19 @@ const ToDoItem = ({ todoItem, todoList, setTodoList }) => {
     setNewTest(e.target.value);
   };
 
-  const onClickSubmitButton = (e) => {
-    if (e.key === 'Enter') {
-      const nextTodoList = todoList.map((item) => ({
-        ...item,
-        text: item.id === todoItem.id ? newText : item.text, // 새로운 아이템 내용을 넣어줌
-      }));
-      setTodoList(nextTodoList);
+  const onClickSubmitButton = () => {
+    const nextTodoList = todoList.map((item) => ({
+      ...item,
+      text: item.id === todoItem.id ? newText : item.text, // 새로운 아이템 내용을 넣어줌
+    }));
+    setTodoList(nextTodoList);
 
-      setEdited(false);
+    setEdited(false);
+  };
+
+  const handleEnter = (e) => {
+    if (e.key === 'Enter') {
+      onClickSubmitButton();
     }
   };
 
@@ -73,7 +77,8 @@ const ToDoItem = ({ todoItem, todoList, setTodoList }) => {
             value={newText}
             ref={editInputRef}
             onChange={onChangeEditInput}
-            onKeyPress={onClickSubmitButton}
+            onClick={onClickSubmitButton}
+            onKeyUp={handleEnter}
           />
         ) : (
           <span
